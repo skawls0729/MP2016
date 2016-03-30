@@ -1,0 +1,93 @@
+package com.example.timetable;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Date;
+
+public class MainActivity extends AppCompatActivity {
+
+
+    int color;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        String Time=CheckTime();//Call Time Function and data value change String
+        TextView Mon1 = (TextView) findViewById(R.id.Mon1);
+        TextView Mon2 = (TextView) findViewById(R.id.Mon2);
+        TextView Mon3 = (TextView) findViewById(R.id.Mon3);
+        TextView Wed1 = (TextView) findViewById(R.id.Wed1);
+        TextView Wed2 = (TextView) findViewById(R.id.Wed2);
+        TextView Wed3 = (TextView) findViewById(R.id.Wed3);
+        TextView Thu1 = (TextView) findViewById(R.id.Tue);
+        TextView Fri1 = (TextView) findViewById(R.id.Fri1);
+        initColor();
+        //Time start day's name and if Time start Mon then, Mon1~3's color is changed blue
+        if(Time.startsWith("Mon"))
+        {
+            Mon1.setBackgroundColor(Color.BLUE);
+            Mon2.setBackgroundColor(Color.BLUE);
+            Mon3.setBackgroundColor(Color.BLUE);
+        }
+        else if(Time.startsWith("Wed")) {
+            Wed1.setBackgroundColor(Color.BLUE);
+            Wed2.setBackgroundColor(Color.BLUE);
+            Wed3.setBackgroundColor(Color.BLUE);
+
+        }
+        else if(Time.startsWith("Thu"))
+        {
+            Thu1.setBackgroundColor(Color.BLUE);
+        }
+        else if(Time.startsWith("Fri"))
+        {
+            Fri1.setBackgroundColor(Color.BLUE);
+        }
+    }
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        initColor();
+    }
+    //method for class is changed at not today.
+    public void initColor()
+    {
+        TextView Mon1 = (TextView) findViewById(R.id.Mon1);
+        TextView Mon2 = (TextView) findViewById(R.id.Mon2);
+        TextView Mon3 = (TextView) findViewById(R.id.Mon3);
+        TextView Wed1 = (TextView) findViewById(R.id.Wed1);
+        TextView Wed2 = (TextView) findViewById(R.id.Wed2);
+        TextView Wed3 = (TextView) findViewById(R.id.Wed3);
+        TextView Tue1 = (TextView) findViewById(R.id.Tue);
+        TextView Fri1 = (TextView) findViewById(R.id.Fri1);
+        Mon1.setBackgroundColor(Color.YELLOW);
+        Mon2.setBackgroundColor(Color.YELLOW);
+        Mon3.setBackgroundColor(Color.YELLOW);
+        Wed1.setBackgroundColor(Color.YELLOW);
+        Wed2.setBackgroundColor(Color.YELLOW);
+        Wed3.setBackgroundColor(Color.YELLOW);
+        Wed1.setBackgroundColor(Color.YELLOW);
+        Wed2.setBackgroundColor(Color.YELLOW);
+        Wed3.setBackgroundColor(Color.YELLOW);
+        Tue1.setBackgroundColor(Color.YELLOW);
+        Fri1.setBackgroundColor(Color.YELLOW);
+
+    }
+    //save string of today
+    public String CheckTime() {
+        String Time = "";
+        Time += new Date().toString();
+        Toast.makeText(getApplicationContext(),Time,Toast.LENGTH_SHORT).show();
+        return Time;
+    }
+}
