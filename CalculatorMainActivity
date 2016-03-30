@@ -1,0 +1,315 @@
+package com.example.calcul2;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnP, btnM, btnX, btnD, btnE, btnC;
+    EditText input;
+    TextView Result;
+    int Checker = 0;
+    int num1, num2;
+    double results = 0.0;
+    calculator cal;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        btn1 = (Button) findViewById(R.id.btn1);
+        btn2 = (Button) findViewById(R.id.btn2);
+        btn3 = (Button) findViewById(R.id.btn3);
+        btn4 = (Button) findViewById(R.id.btn4);
+        btn5 = (Button) findViewById(R.id.btn5);
+        btn6 = (Button) findViewById(R.id.btn6);
+        btn7 = (Button) findViewById(R.id.btn7);
+        btn8 = (Button) findViewById(R.id.btn8);
+        btn9 = (Button) findViewById(R.id.btn9);
+        btn0 = (Button) findViewById(R.id.btn0);
+        btnP = (Button) findViewById(R.id.btnP);
+        btnM = (Button) findViewById(R.id.btnM);
+        btnX = (Button) findViewById(R.id.btnMul);
+        btnD = (Button) findViewById(R.id.btnmi);
+        btnE = (Button) findViewById(R.id.btnE);
+        btnC = (Button) findViewById(R.id.btnC);
+        input = (EditText) findViewById(R.id.editText);
+        Result = (TextView) findViewById(R.id.Result);
+        btn0.setOnClickListener(this);
+        btn1.setOnClickListener(this);
+        btn2.setOnClickListener(this);
+        btn3.setOnClickListener(this);
+        btn4.setOnClickListener(this);
+        btn5.setOnClickListener(this);
+        btn6.setOnClickListener(this);
+        btn7.setOnClickListener(this);
+        btn8.setOnClickListener(this);
+        btn9.setOnClickListener(this);
+        btnP.setOnClickListener(this);
+        btnM.setOnClickListener(this);
+        btnX.setOnClickListener(this);
+        btnD.setOnClickListener(this);
+        btnE.setOnClickListener(this);
+        btnC.setOnClickListener(this);
+        if (savedInstanceState != null) {
+            Result.setText(savedInstanceState.getString("Result").toString());
+            results=savedInstanceState.getDouble("results");
+            input.setText(savedInstanceState.getString("input").toString());
+            Checker=savedInstanceState.getInt("Checker");
+        }
+        cal = new calculator(results);
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) { // Save the user's current game state
+        savedInstanceState.putString("Result", Result.getText().toString());
+        savedInstanceState.putDouble("results", results);
+        savedInstanceState.putString("input",input.getText().toString());
+        savedInstanceState.putInt("Checker",Checker);
+
+// Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+    @Override
+    public void onClick(View v) {
+        String inputText, resultText;
+        inputText = input.getText().toString();
+
+
+        if (v.getId() == btnP.getId()) {
+            inputText += "+";
+            input.setText(inputText);
+        } else if (v.getId() == btnM.getId()) {
+            inputText += "-";
+            input.setText(inputText);
+        } else if (v.getId() == btnX.getId()) {
+            inputText += "*";
+            input.setText(inputText);
+        } else if (v.getId() == btnD.getId()) {
+            inputText += "/";
+            input.setText(inputText);
+        } else if (v.getId() == btnE.getId()) {
+
+
+            if (Checker == 0) {
+                results = cal.calcul(inputText += "=");
+                Result.setText(Result.getText().toString() + results + "/");
+                input.setText("" + results);
+                Checker = 1;
+            } else {// remove error about atoi for values of double.
+                inputText = "0" + inputText.substring((results + "").length());
+                results = cal.calcul(inputText += "=");
+                Result.setText(Result.getText().toString() + results + "/");
+                input.setText("" + results);
+            }
+
+
+        } else if (v.getId() == btnC.getId()) {
+            input.setText("0");
+            results=0.0;
+            cal = new calculator(results);
+            Checker = 0;
+        } else if (v.getId() == btn0.getId()) {
+            inputText += 0;
+            input.setText(inputText);
+        } else if (v.getId() == btn1.getId()) {
+            inputText += 1;
+            input.setText(inputText);
+        } else if (v.getId() == btn2.getId()) {
+            inputText += 2;
+            input.setText(inputText);
+        } else if (v.getId() == btn3.getId()) {
+            inputText += 3;
+            input.setText(inputText);
+        } else if (v.getId() == btn4.getId()) {
+            inputText += 4;
+            input.setText(inputText);
+        } else if (v.getId() == btn5.getId()) {
+            inputText += 5;
+            input.setText(inputText);
+        } else if (v.getId() == btn6.getId()) {
+            inputText += 6;
+            input.setText(inputText);
+        } else if (v.getId() == btn7.getId()) {
+            inputText += 7;
+            input.setText(inputText);
+        } else if (v.getId() == btn8.getId()) {
+            inputText += 8;
+            input.setText(inputText);
+        } else if (v.getId() == btn9.getId()) {
+            inputText += 9;
+            input.setText(inputText);
+        }
+    }
+
+    public class calculator {
+
+        String postfix = null;
+        Node[] output = new Node[100];
+        char[] operstack = new char[100];
+        int outputleng;
+
+        double results;
+
+        calculator(double result) {
+            results = result;
+        }
+
+        public double calcul(String infix) {
+
+            int result = 0;
+            int k;
+            int j;
+            for (int i = 0; i < 100; i++)
+                output[i] = new Node();
+            makePostfix(infix);
+            j = outputleng;
+            int i;
+            i = 0;
+
+
+            while (i < j) {
+                if (output[i].check == 2) {
+                    if (i == 1) {
+                        return (float) -3.1415921;//if the number of operator is lager than the number of number then, return error value.
+                    }
+                    if (output[i].oper == '+')//After calculating to two values after operator, a result is saved to (index -2).
+                    {
+                        output[i - 2].num = output[i - 2].num + output[i - 1].num;
+                    } else if (output[i].oper == '-') {
+                        output[i - 2].num = output[i - 2].num - output[i - 1].num;
+                    } else if (output[i].oper == '*') {
+                        output[i - 2].num = output[i - 2].num * output[i - 1].num;
+                    } else if (output[i].oper == '/') {
+                        //check divided by zero
+                        if (output[i - 1].num == (float) 0)
+                            return -3.1415922;//if number is divided by zero , return error value.
+                        output[i - 2].num = output[i - 2].num / output[i - 1].num;
+                    } else//if character is not operator then return error value
+                    {
+                        return (float) -3.1415923;
+                    }
+                    k = i + 1;
+                    while (k < j)// because both operator and numper is removed. each numbers and operaters after used operator is compacted like dobule spaces
+                    {
+                        output[k - 2] = output[k];
+                        k++;
+                    }
+                    j = j - 2;
+                    i = 0;
+                } else
+                    i++;
+            }
+
+
+            return results = output[0].num;
+        }
+
+        public void makePostfix(String infix) {
+
+            int leng = infix.length();
+            int i, j, k, t;
+            char temp;
+            char oper;
+            int calnum = 0;
+            int numcheck = 0;
+            double Dcalnum;
+            String temps = new String();
+            k = 0;
+            j = 0;
+            temps = "";
+            for (i = 0; i < leng; i++) {
+                if (infix.charAt(i) >= '0' && infix.charAt(i) <= '9')// Part for checking number.
+                {
+                    temp = infix.charAt(i);
+                    temps = temps + temp;
+                    calnum = calnum * 10 + Integer.parseInt(temps);// atoi
+                    temps = "";
+                    numcheck = 1;
+                } else {
+
+                    if (calnum == 0 || i == 1)//first atoi part for Second calculator  , ex) first 3+5=8.0 , Second 8.0+3=
+                        Dcalnum = results;
+                    else// other cases.
+                        Dcalnum = calnum;
+                    temp = infix.charAt(i);
+
+                    push('[', Dcalnum, j, 2);//push Number
+                    j++;
+                    calnum = 0;
+                    numcheck = 0;
+
+                    if (temp == '=')
+                        break;
+                    oper = temp;
+                    if (k == 0) {
+                        push(oper, Dcalnum, k, 1);
+                        k++;
+                    } else {
+                        if ((oper == '-' || oper == '+') && (operstack[k - 1] == '*' || operstack[k - 1] == '/'))
+                        // there's '*' or '/' berfore + or - , then if push is runned
+                        { // + or - is poped  so , '*','/' preferentially is poped  and  is pushed to output of stack.
+                            temp = pop(k);
+                            k--;
+                            push(temp, 0, j, 2);
+                            j++;
+                            push(oper, 0, k, 1);
+                            k++;
+                        }  else {
+                            push(oper, 0, k, 1);
+                            k++;
+                        }
+                    }
+                }
+            }
+            while (k > 0)//  After all operators in operstack  is poped , they are pushed  stack of output
+            {
+                temp = pop(k);
+                k--;
+                push(temp, 0, j, 2);
+                j++;
+            }
+            
+            outputleng = j;
+
+        }
+
+        private char pop(int k) {
+
+            char val;
+            k--;
+            val = operstack[k];
+            operstack[k] = ' ';
+            return val;
+        }
+
+        private void push(char oper, double calnum, int index, int checker) {
+
+            if (checker == 1)//operstack
+            {
+                operstack[index] = oper;
+            } else//output stack
+            {
+                if (oper == '[') // oper of '[' mean what is pushed number
+                {
+                    output[index].check = 1;
+                    output[index].num = calnum;
+                } else {
+                    output[index].oper = oper;
+                    output[index].check = 2;
+                }
+            }
+        }
+    }
+
+    public class Node {
+        int check;
+        double num;
+        char oper;
+    }
+}
+
