@@ -1,0 +1,103 @@
+package com.example.tipcal;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText Number;
+    EditText Rate;
+    RadioButton radio10;
+    RadioButton radio20;
+    RadioButton radioOther;
+    RadioGroup groups;
+    boolean otherChecked = false;
+    int backgroundColor = Color.WHITE;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+        Number = (EditText) findViewById(R.id.rateText);
+        Rate = (EditText) findViewById(R.id.hiddenText);
+        radio10 = (RadioButton) findViewById(R.id.button10);
+        radio20 = (RadioButton) findViewById(R.id.button20);
+        radioOther = (RadioButton) findViewById(R.id.buttonOthers);
+        groups = (RadioGroup) findViewById(R.id.RadioGroupTip);
+        // Restore state members from saved instance
+        if (savedInstanceState != null) {
+            Number.setText(savedInstanceState.getString("Number").toString());
+            Rate.setText(savedInstanceState.getString("Rate").toString());
+            otherChecked = savedInstanceState.getBoolean("otherChecked");
+            backgroundColor = savedInstanceState.getInt("backgroundColor");
+        } else {
+            Number.setText("");
+            Rate.setText("");
+            otherChecked = false;
+            backgroundColor = Color.WHITE;
+        }
+        Rate.setEnabled(otherChecked);
+        Rate.setBackgroundColor(backgroundColor);
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) { // Save the user's current game state
+        savedInstanceState.putString("Number", Number.getText().toString());
+        savedInstanceState.putString("Rate", Rate.getText().toString());
+        savedInstanceState.putBoolean("otherChecked", otherChecked);
+        savedInstanceState.putInt("backgroundColor", backgroundColor);
+// Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    //show and hide
+    public void HideText(View view) {
+        if (view.getId() == radioOther.getId())
+            otherChecked = true;
+        else
+            otherChecked = false;
+        if (otherChecked)
+            backgroundColor = Color.BLUE;
+        else {
+            backgroundColor = Color.WHITE;
+            Rate.setText("");
+        }
+        Rate.setBackgroundColor(backgroundColor);
+        Rate.setEnabled(otherChecked);
+    }
+
+
+    public void Calculate(View view) {
+        int original = new Integer(Number.getText().toString()).intValue();
+        double rates = 0, result;
+        int temp;
+        int groupID = groups.getCheckedRadioButtonId();
+        if (radio10.getId() == groupID) {
+            rates = 0.1;
+        } else if (radio20.getId() == groupID) {
+            rates = 0.2;
+        } else if (radioOther.getId() == groupID)//when other is clicked , if other of val is 30 then 30 is divided by 100
+        {
+            temp = new Integer(Rate.getText().toString()).intValue();
+            rates = (double) temp / 100.0;
+
+        } else {
+            rates = 0;
+        }
+        //resul is presented by toast function.
+        if (!Number.getText().equals("") || original > 0 || !Rate.getText().toString().equals("")) {
+            result = original * rates;
+            Toast.makeText(getApplicationContext(), "Tip : " + result +" / Total : "+ original, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Invalid", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
+
