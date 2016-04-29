@@ -1,0 +1,644 @@
+//Calculs
+package com.example.mphomework2;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class Calculs extends AppCompatActivity implements View.OnClickListener {
+
+    Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnP, btnM, btnX, btnD, btnE, btnC;
+    EditText input;
+    TextView Result;
+    double results = 0.0;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.calcul);
+        btn1 = (Button) findViewById(R.id.btn1);
+        btn2 = (Button) findViewById(R.id.btn2);
+        btn3 = (Button) findViewById(R.id.btn3);
+        btn4 = (Button) findViewById(R.id.btn4);
+        btn5 = (Button) findViewById(R.id.btn5);
+        btn6 = (Button) findViewById(R.id.btn6);
+        btn7 = (Button) findViewById(R.id.btn7);
+        btn8 = (Button) findViewById(R.id.btn8);
+        btn9 = (Button) findViewById(R.id.btn9);
+        btn0 = (Button) findViewById(R.id.btn0);
+        btnP = (Button) findViewById(R.id.btnP);
+        btnM = (Button) findViewById(R.id.btnM);
+        btnX = (Button) findViewById(R.id.btnMul);
+        btnD = (Button) findViewById(R.id.btnmi);
+        btnE = (Button) findViewById(R.id.btnE);
+        btnC = (Button) findViewById(R.id.btnC);
+        input = (EditText) findViewById(R.id.editText);
+        Result = (TextView) findViewById(R.id.Result);
+        btn0.setOnClickListener(this);
+        btn1.setOnClickListener(this);
+        btn2.setOnClickListener(this);
+        btn3.setOnClickListener(this);
+        btn4.setOnClickListener(this);
+        btn5.setOnClickListener(this);
+        btn6.setOnClickListener(this);
+        btn7.setOnClickListener(this);
+        btn8.setOnClickListener(this);
+        btn9.setOnClickListener(this);
+        btnP.setOnClickListener(this);
+        btnM.setOnClickListener(this);
+        btnX.setOnClickListener(this);
+        btnD.setOnClickListener(this);
+        btnE.setOnClickListener(this);
+        btnC.setOnClickListener(this);
+        if (savedInstanceState != null) {
+            Result.setText(savedInstanceState.getString("Result").toString());
+            results = savedInstanceState.getDouble("results");
+            input.setText(savedInstanceState.getString("input").toString());
+
+        }
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) { // Save the user's current game state
+        savedInstanceState.putString("Result", Result.getText().toString());
+        savedInstanceState.putDouble("results", results);
+        savedInstanceState.putString("input", input.getText().toString());
+
+// Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onClick(View v) {
+        String inputText, resultText;
+        inputText = input.getText().toString();
+        double val = Double.parseDouble(inputText);
+        //Operator 버튼을 누르게 되면 원래 값과 함께 계산 하게되어 results 변수에 저장한다
+        //input text 는 0으로 다시 초기화.
+        if (v.getId() == btnP.getId()) {
+            results += val;
+            input.setText("0");
+        } else if (v.getId() == btnM.getId()) {
+            results -= val;
+            input.setText("0");
+        } else if (v.getId() == btnX.getId()) {
+            results *= val;
+            input.setText("0");
+        } else if (v.getId() == btnD.getId()) {
+            if (val == 0.0) {//만약 0에 의한 나누기는 불가능하므로 결과값에 오류 메세지를 담아서 원래 Activityd 에 저장하고 종료한다.
+                Intent myIntent = getIntent();
+                Bundle b=myIntent.getExtras();
+                b.putDouble("Result", results);
+                myIntent.putExtras(b);
+                setResult(Activity.RESULT_OK, myIntent);
+                finish();
+            } else {
+                results /= val;
+                input.setText("0");
+            }
+        } else if (v.getId() == btnE.getId()) {
+            String returnval = "" + results;
+            Intent myIntent = getIntent();
+            Bundle b=myIntent.getExtras();
+            b.putDouble("Result",results);
+            myIntent.putExtras(b);
+            setResult(Activity.RESULT_OK, myIntent);
+            finish();
+
+        } else if (v.getId() == btnC.getId()) {
+            input.setText("0");
+            results = 0.0;
+        } else if (v.getId() == btn0.getId()) {
+            inputText += 0;
+            input.setText(inputText);
+        } else if (v.getId() == btn1.getId()) {
+            inputText += 1;
+            input.setText(inputText);
+        } else if (v.getId() == btn2.getId()) {
+            inputText += 2;
+            input.setText(inputText);
+        } else if (v.getId() == btn3.getId()) {
+            inputText += 3;
+            input.setText(inputText);
+        } else if (v.getId() == btn4.getId()) {
+            inputText += 4;
+            input.setText(inputText);
+        } else if (v.getId() == btn5.getId()) {
+            inputText += 5;
+            input.setText(inputText);
+        } else if (v.getId() == btn6.getId()) {
+            inputText += 6;
+            input.setText(inputText);
+        } else if (v.getId() == btn7.getId()) {
+            inputText += 7;
+            input.setText(inputText);
+        } else if (v.getId() == btn8.getId()) {
+            inputText += 8;
+            input.setText(inputText);
+        } else if (v.getId() == btn9.getId()) {
+            inputText += 9;
+            input.setText(inputText);
+        }
+    }
+}
+
+
+//changeActivity
+package com.example.mphomework2;
+
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+/**
+ * Created by 남지니 on 2016-04-14.
+ */
+public class changeActivity extends Activity implements View.OnClickListener {
+
+    Button Okay,Cancel;
+    EditText nPass;
+    SharedPreferences sh_pf;
+    SharedPreferences.Editor editor;
+
+    @Override
+    protected void onCreate(Bundle bndles)
+    {
+        super.onCreate(bndles);
+        setContentView(R.layout.changepassword);
+        Okay=(Button)findViewById(R.id.Okay);
+        Cancel=(Button)findViewById(R.id.Cancel);
+        nPass=(EditText)findViewById(R.id.newPass);
+        sh_pf=getSharedPreferences("Login",MODE_PRIVATE);
+        editor=sh_pf.edit();
+        Okay.setOnClickListener(this);
+        Cancel.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if(v.getId()==Okay.getId())
+        {
+            String newPassword = nPass.getText().toString();
+            if(newPassword.length()==4)
+            {
+                editor.putString("Password",newPassword);//새로운 password 를 저장
+                editor.commit();
+            }
+        }
+        else
+        {
+            finish();
+        }
+    }
+}
+//Description
+package com.example.mphomework2;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+/**
+ * Created by 남지니 on 2016-04-28.
+ */
+public class Description extends Activity {
+
+    Intent intent;
+    Bundle myResult;
+    @Override
+    protected void onCreate(Bundle iceice)
+    {
+        super.onCreate(iceice);
+        setContentView(R.layout.explain);
+        myResult=new Bundle();
+    }
+    public void runs(View v)
+    {
+        intent=new Intent(this,Calculs.class);
+        myResult.putDouble("Result",0.0);
+        intent.putExtras(myResult);
+        startActivityForResult(intent, 222);
+    }
+    public void onActivityResult(int request,int result,Intent data)
+    {
+        super.onActivityResult(request,result,data);
+
+        double results = data.getExtras().getDouble("Result");
+        if(result== Activity.RESULT_OK && request==222)
+        Toast.makeText(getApplicationContext(),"Result = "+results,1).show();
+    }
+
+
+}
+//MenuActivity
+package com.example.mphomework2;
+
+import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Intent;
+import android.media.Image;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class MenuActivity extends ListActivity{
+
+    TextView txt;
+    Intent myintent;
+    @Override
+    protected void onCreate(Bundle savedInstanceState)  {
+        super.onCreate(savedInstanceState);
+        txt= (TextView)findViewById(R.id.txtsv);
+        String []Values={"TimeTable","TipCalculator","Calculator","ChangePassword"};
+        MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this,
+                Values);
+        setListAdapter(adapter);
+        myintent = new Intent(this,changeActivity.class);
+    }
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        if (position == 0) {
+            startActivity(new Intent(this,timeTable.class));
+        }
+        if (position == 1)
+        {
+            startActivity(new Intent(this,Tipcalculator.class));
+        }
+        if(position==2)
+        {//결과 값을 return 받아 Toast 해주기위해 startActivityForResult 를 사용
+            startActivity(new Intent(this, Description.class));
+        }
+        if(position==3)
+        {
+            startActivity(myintent);
+        }
+    }
+
+}
+//MySipleArrayAdapter
+package com.example.mphomework2;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+public class MySimpleArrayAdapter extends ArrayAdapter<String> {
+    private final Context context;
+    private final String[] values;
+
+    public MySimpleArrayAdapter(Context context, String[] values) {
+        super(context, R.layout.activity_menu, values);
+        this.context = context;
+        this.values = values;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rowView = inflater.inflate(R.layout.activity_menu, parent, false);
+        TextView textView = (TextView) rowView.findViewById(R.id.label);
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
+        textView.setText(values[position]);
+// Change the icon for Function's feature
+        String s = values[position];
+        if (s.startsWith("Time")) {
+            imageView.setImageResource(R.drawable.time0table);
+        }else if (s.startsWith("Tip")) {
+            imageView.setImageResource(R.drawable.tip);
+        }
+        else if(s.startsWith("Cal"))
+        {
+            imageView.setImageResource(R.drawable.cal);
+        }
+        else
+        {
+            imageView.setImageResource(R.drawable.ic_launcher);
+        }
+        return rowView;
+    }
+}
+//passwordActivity
+package com.example.mphomework2;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+public class passwordActivity extends AppCompatActivity {
+
+    EditText[] pass = new EditText[4];
+    Button loginbtn;
+    Intent intent;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.password);
+
+        intent = new Intent(this,MenuActivity.class);
+        pass[0] = (EditText) findViewById(R.id.pass1);
+        pass[1] = (EditText) findViewById(R.id.pass2);
+        pass[2] = (EditText) findViewById(R.id.pass3);
+        pass[3] = (EditText) findViewById(R.id.pass4);
+        loginbtn = (Button) findViewById(R.id.LoginBtn);
+        loginbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedPreferences = getSharedPreferences("Login",MODE_PRIVATE);
+                String Check = sharedPreferences.getString("Password","0000").toString();//만약 Password 가 저장되있지 않을때 defalt 값은 0000
+                String passs = "";
+                for(int i=0;i<4;i++)
+                {
+                    passs+=pass[i].getText().toString();
+                }
+                if(passs.equals(Check))
+                    startActivity(intent);
+            }
+        });
+        setTextFocus();
+
+    }
+
+    // Input 을 받게 되면 다음 칸으로 focus를 옮김
+    public void setTextFocus() {
+        pass[0].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                pass[1].requestFocus();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        pass[1].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                pass[2].requestFocus();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        pass[2].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                pass[3].requestFocus();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+
+}
+
+//timeTable
+package com.example.mphomework2;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Date;
+
+public class timeTable extends AppCompatActivity {
+
+
+    int color;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.timetable);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        String Time=CheckTime();//Call Time Function and data value change String
+        TextView Mon1 = (TextView) findViewById(R.id.Mon1);
+        TextView Mon2 = (TextView) findViewById(R.id.Mon2);
+        TextView Mon3 = (TextView) findViewById(R.id.Mon3);
+        TextView Wed1 = (TextView) findViewById(R.id.Wed1);
+        TextView Wed2 = (TextView) findViewById(R.id.Wed2);
+        TextView Wed3 = (TextView) findViewById(R.id.Wed3);
+        TextView Thu1 = (TextView) findViewById(R.id.Tue);
+        TextView Fri1 = (TextView) findViewById(R.id.Fri1);
+        initColor();
+        //Time start day's name and if Time start Mon then, Mon1~3's color is changed blue
+        if(Time.startsWith("Mon"))
+        {
+            Mon1.setBackgroundColor(Color.BLUE);
+            Mon2.setBackgroundColor(Color.BLUE);
+            Mon3.setBackgroundColor(Color.BLUE);
+        }
+        else if(Time.startsWith("Wed")) {
+            Wed1.setBackgroundColor(Color.BLUE);
+            Wed2.setBackgroundColor(Color.BLUE);
+            Wed3.setBackgroundColor(Color.BLUE);
+
+        }
+        else if(Time.startsWith("Thu"))
+        {
+            Thu1.setBackgroundColor(Color.BLUE);
+        }
+        else if(Time.startsWith("Fri"))
+        {
+            Fri1.setBackgroundColor(Color.BLUE);
+        }
+    }
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        initColor();
+    }
+    //method for class is changed at not today.
+    public void initColor()
+    {
+        TextView Mon1 = (TextView) findViewById(R.id.Mon1);
+        TextView Mon2 = (TextView) findViewById(R.id.Mon2);
+        TextView Mon3 = (TextView) findViewById(R.id.Mon3);
+        TextView Wed1 = (TextView) findViewById(R.id.Wed1);
+        TextView Wed2 = (TextView) findViewById(R.id.Wed2);
+        TextView Wed3 = (TextView) findViewById(R.id.Wed3);
+        TextView Tue1 = (TextView) findViewById(R.id.Tue);
+        TextView Fri1 = (TextView) findViewById(R.id.Fri1);
+        Mon1.setBackgroundColor(Color.YELLOW);
+        Mon2.setBackgroundColor(Color.YELLOW);
+        Mon3.setBackgroundColor(Color.YELLOW);
+        Wed1.setBackgroundColor(Color.YELLOW);
+        Wed2.setBackgroundColor(Color.YELLOW);
+        Wed3.setBackgroundColor(Color.YELLOW);
+        Wed1.setBackgroundColor(Color.YELLOW);
+        Wed2.setBackgroundColor(Color.YELLOW);
+        Wed3.setBackgroundColor(Color.YELLOW);
+        Tue1.setBackgroundColor(Color.YELLOW);
+        Fri1.setBackgroundColor(Color.YELLOW);
+
+    }
+    //save string of today
+    public String CheckTime() {
+        String Time = "";
+        Time += new Date().toString();
+        Toast.makeText(getApplicationContext(),Time,Toast.LENGTH_SHORT).show();
+        return Time;
+    }
+}
+
+//Tipcalculator
+package com.example.mphomework2;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
+public class Tipcalculator extends AppCompatActivity {
+
+    EditText Number;
+    EditText Rate;
+    RadioButton radio10;
+    RadioButton radio20;
+    RadioButton radioOther;
+    RadioGroup groups;
+    boolean otherChecked = false;
+    int backgroundColor = Color.WHITE;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.tip_calculator);
+
+
+        Number = (EditText) findViewById(R.id.rateText);
+        Rate = (EditText) findViewById(R.id.hiddenText);
+        radio10 = (RadioButton) findViewById(R.id.button10);
+        radio20 = (RadioButton) findViewById(R.id.button20);
+        radioOther = (RadioButton) findViewById(R.id.buttonOthers);
+        groups = (RadioGroup) findViewById(R.id.RadioGroupTip);
+        // Restore state members from saved instance
+        if (savedInstanceState != null) {
+            Number.setText(savedInstanceState.getString("Number").toString());
+            Rate.setText(savedInstanceState.getString("Rate").toString());
+            otherChecked = savedInstanceState.getBoolean("otherChecked");
+            backgroundColor = savedInstanceState.getInt("backgroundColor");
+        } else {
+            Number.setText("");
+            Rate.setText("");
+            otherChecked = false;
+            backgroundColor = Color.WHITE;
+        }
+        Rate.setEnabled(otherChecked);
+        Rate.setBackgroundColor(backgroundColor);
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) { // Save the user's current game state
+        savedInstanceState.putString("Number", Number.getText().toString());
+        savedInstanceState.putString("Rate", Rate.getText().toString());
+        savedInstanceState.putBoolean("otherChecked", otherChecked);
+        savedInstanceState.putInt("backgroundColor", backgroundColor);
+// Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    //show and hide
+    public void HideText(View view) {
+        if (view.getId() == radioOther.getId())
+            otherChecked = true;
+        else
+            otherChecked = false;
+        if (otherChecked)
+            backgroundColor = Color.BLUE;
+        else {
+            backgroundColor = Color.WHITE;
+            Rate.setText("");
+        }
+        Rate.setBackgroundColor(backgroundColor);
+        Rate.setEnabled(otherChecked);
+    }
+
+
+    public void Calculate(View view) {
+        int original = new Integer(Number.getText().toString()).intValue();
+        double rates = 0, result;
+        int temp;
+        int groupID = groups.getCheckedRadioButtonId();
+        if (radio10.getId() == groupID) {
+            rates = 0.1;
+        } else if (radio20.getId() == groupID) {
+            rates = 0.2;
+        } else if (radioOther.getId() == groupID)//when other is clicked , if other of val is 30 then 30 is divided by 100
+        {
+            temp = new Integer(Rate.getText().toString()).intValue();
+            rates = (double) temp / 100.0;
+
+        } else {
+            rates = 0;
+        }
+        //resul is presented by toast function.
+        if (!Number.getText().equals("") || original > 0 || !Rate.getText().toString().equals("")) {
+            result = original * rates;
+            Toast.makeText(getApplicationContext(), "Tip : " + result +" / Total : "+ original, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Invalid", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
+
